@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaulTysonCoin</title>
+    <link rel="icon" type="image/x-icon" href="https://ibb.co/6myvGy7">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0b4663; /* Changed from #808080 */
+            background-image: 
+                radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px), /* Lighter dots with reduced opacity */
+                radial-gradient(circle, rgba(0, 0, 0, 0.2) 1px, transparent 1px); /* Darker dots with reduced opacity */
+            background-size: 20px 20px, 30px 30px;
+            background-position: 0 0, 10px 10px;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        body::before {
+            content: none; /* Remove the previous overlay */
+        }
+        .menu-bar {
+            background-color: rgba(18, 17, 64, 0.8);
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            position: relative;
+            justify-content: space-between;
+            transform: perspective(1000px) rotateX(2deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3),
+                        inset 0 -8px 0 0 rgba(0,0,0,0.2),
+                        0 10px 20px rgba(0,0,0,0.5); /* Added black shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #000000;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.5);
+            transform: perspective(1000px) rotateX(-45deg);
+        }
+        .menu-bar:hover {
+            transform: perspective(1000px) rotateX(0deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4),
+                        inset 0 -10px 0 0 rgba(0,0,0,0.3),
+                        0 15px 30px rgba(0,0,0,0.6); /* Enhanced shadow on hover */
+        }
+        .logo {
+            max-height: 110px; /* Slightly increased from the previous value */
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            animation: bounce 0.5s ease infinite alternate;
+        }
+        .logo-link {
+            display: inline-block;
+            overflow: hidden;
+        }
+        .container {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-bottom: 100px; /* Increased padding at the bottom */
+        }
+        .buy-box {
+            background-color: rgba(102, 128, 167, 0.8);
+            border: 3px solid #000000;
+            border-radius: 50px;
+            padding: 20px 30px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3),
+                        inset 0 -8px 0 0 rgba(0,0,0,0.2);
+            transform: perspective(1000px) rotateX(10deg) rotateY(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            text-shadow: 2px 2px 0 #000000;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            max-width: 320px;
+            margin: 0 auto;
+            animation: blinkingShadow 2s infinite;
+        }
+        .buy-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        .buy-box:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(-5deg) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5),
+                        inset 0 -12px 0 0 rgba(0,0,0,0.3),
+                        0 0 40px rgba(0, 255, 0, 0.9);
+            background-color: rgba(102, 128, 167, 1);
+            animation: none;
+        }
+        .buy-box:hover::before {
+            left: 100%;
+        }
+        .buy-box:active {
+            transform: perspective(1000px) rotateX(0deg) rotateY(-5deg) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4),
+                        inset 0 -6px 0 0 rgba(0,0,0,0.2);
+        }
+        .zebra-title {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 72px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px; /* Add this line to move the title down */
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 
+                4px 4px 0 #000,
+                -4px -4px 0 #000,
+                4px -4px 0 #000,
+                -4px 4px 0 #000;
+            background: repeating-linear-gradient(
+                45deg,
+                #ffffff,
+                #ffffff 10px,
+                #000000 10px,
+                #000000 20px
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: white;
+            background-clip: text;
+            animation: stripes 30s linear infinite;
+            position: relative;
+            z-index: 11;
+        }
+
+        @keyframes stripes {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 100% 0;
+            }
+        }
+
+        .falling-image {
+            position: absolute;
+            top: -200px; /* Start above the viewport */
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 200px;
+            opacity: 0;
+            transition: top 0.5s ease, opacity 0.5s ease;
+            pointer-events: none; /* Prevent image from interfering with clicks */
+            z-index: 10;
+        }
+
+        .buy-box:hover ~ .falling-image {
+            top: 250px; /* Adjusted to fall even lower */
+            opacity: 1;
+        }
+
+        #falling-coins-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .falling-coin {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            animation: fallAnimation linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes fallAnimation {
+            0% {
+                transform: translateY(-80px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(calc(100vh + 80px)) rotate(360deg);
+            }
+        }
+        .social-icon {
+            display: flex;
+            align-items: center;
+        }
+        .social-logo {
+            max-height: 50px; /* Increased from 40px to 50px */
+            width: auto; /* Ensure the width adjusts proportionally */
+            transition: transform 0.3s ease;
+        }
+        .social-logo:hover {
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                transform: translateY(-10px) scale(1.1);
+            }
+        }
+
+        .menu-bar {
+            justify-content: space-between;
+        }
+
+        .social-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Increased gap for better spacing between larger icons */
+        }
+
+        .zilla-image {
+            max-width: 300px;
+            height: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            animation: slowBounce 4s ease-in-out infinite, shadowFlicker 5s infinite;
+        }
+
+        @keyframes slowBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px); /* Reduced from -15px to -10px for a gentler bounce */
+            }
+        }
+
+        @keyframes shadowFlicker {
+            0%, 100% {
+                box-shadow: 
+                    0 10px 20px rgba(11, 70, 99, 0.4),
+                    0 6px 6px rgba(11, 70, 99, 0.3),
+                    0 0 0 15px rgba(11, 70, 99, 0.6),
+                    0 0 20px 5px rgba(11, 70, 99, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 15px 25px rgba(11, 70, 99, 0.5),
+                    0 8px 8px rgba(11, 70, 99, 0.4),
+                    0 0 0 20px rgba(11, 70, 99, 0.7),
+                    0 0 30px 10px rgba(11, 70, 99, 0.4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-size: 5px 5px; /* Remove the cover background size */
+            }
+
+            .menu-bar {
+                flex-direction: column;
+                padding: 10px;
+                transform: none;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            }
+
+            .menu-bar::after {
+                display: none;
+            }
+
+            .logo {
+                max-height: 80px;
+                margin-bottom: 10px;
+            }
+
+            .social-icons {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .social-logo {
+                max-height: 30px;
+            }
+
+            .container {
+                height: auto;
+                min-height: calc(100% - 180px);
+                padding: 20px;
+            }
+
+            .zebra-title {
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+
+            .buy-box {
+                font-size: 24px; /* Increased from 20px */
+                padding: 15px 25px; /* Increased padding */
+                max-width: 260px; /* Increased from 220px */
+            }
+
+            .buy-box:hover {
+                transform: scale(1.05);
+            }
+
+            .falling-image {
+                max-width: 150px;
+            }
+
+            .scrolling-box {
+                height: 40px;
+                transform: none;
+            }
+
+            .scrolling-text {
+                font-size: 20px;
+            }
+
+            .zilla-image {
+                max-width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .zebra-title {
+                font-size: 28px;
+            }
+
+            .buy-box {
+                font-size: 20px; /* Increased from 18px */
+                padding: 12px 20px; /* Increased padding */
+                max-width: 220px; /* Added max-width for smallest screens */
+            }
+
+            .falling-image {
+                max-width: 120px;
+            }
+
+            .scrolling-text {
+                font-size: 16px;
+            }
+        }
+
+        /* Add this new media query for very small devices */
+        @media (max-width: 320px) {
+            .zebra-title {
+                font-size: 24px;
+            }
+
+            .buy-box {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+
+            .falling-image {
+                max-width: 100px;
+            }
+
+            .scrolling-text {
+                font-size: 14px;
+            }
+        }
+
+        .ca-box {
+            background-color: rgba(102, 128, 167, 0.8);
+            border: 3px solid #000000;
+            border-radius: 25px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3),
+                        inset 0 -8px 0 0 rgba(0,0,0,0.2);
+            cursor: pointer;
+            margin: 20px auto;
+            transform: perspective(1000px) rotateX(10deg) rotateY(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            max-width: 300px;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content horizontally */
+        }
+
+        .ca-box:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(-5deg) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5),
+                        inset 0 -12px 0 0 rgba(0,0,0,0.3);
+            background-color: rgba(102, 128, 167, 1);
+        }
+
+        .ca-box:active {
+            transform: perspective(1000px) rotateX(0deg) rotateY(-5deg) scale(1.02);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4),
+                        inset 0 -6px 0 0 rgba(0,0,0,0.2);
+        }
+
+        .ca-text {
+            flex-grow: 1;
+            text-align: center;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 16px;
+            text-shadow: 1px 1px 0 #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clipboard-icon {
+            width: 20px;
+            height: 20px;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .ca-box {
+                font-size: 14px;
+                padding: 6px 10px;
+                height: 36px;
+            }
+            
+            .clipboard-icon {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ca-box {
+                font-size: 12px;
+                padding: 5px 8px;
+                height: 30px;
+            }
+            
+            .clipboard-icon {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* Footer Styles */
+        .site-footer {
+            flex-shrink: 0;
+            width: 100%;
+            background-color: rgba(18, 17, 64, 0.9);
+            color: #ffffff;
+            padding: 40px 0 20px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            border-top: 3px solid #000000;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3), 0 -10px 20px rgba(0,0,0,0.5); /* Added black shadow */
+            margin-top: -270px; /* Slightly increased from -250px */
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Center the footer content */
+            gap: 20px; /* Slightly increased gap */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            }
+
+        .footer-section {
+            flex: 1;
+            min-width: 160px; /* Slightly increased from 150px */
+            max-width: 240px; /* Increased from 220px to 240px */
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .footer-section h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0 #000000;
+        }
+
+        .footer-section p, .footer-section ul {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #000000;
+        }
+
+        .footer-section .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-section .social-icons img {
+            width: 30px;
+            height: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-section .social-icons img:hover {
+            transform: scale(1.2);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                margin-bottom: 30px;
+            }
+        }
+
+        /* New style for the space between CA box and footer */
+        .footer-spacer {
+            flex-grow: 1;
+            min-height: 50px; /* Further reduced from 100px to 50px */
+        }
+
+        .content-wrapper {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 320px; /* Slightly increased from 300px */
+        }
+
+        .container {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-bottom: 100px;
+        }
+
+        .footer-spacer {
+            flex-grow: 1;
+            min-height: 50px;
+        }
+
+        .site-footer {
+            flex-shrink: 0;
+            width: 100%;
+            background-color: rgba(18, 17, 64, 0.9);
+            color: #ffffff;
+            padding: 40px 0 20px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            border-top: 3px solid #000000;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3), 0 -10px 20px rgba(0,0,0,0.5); /* Added black shadow */
+            margin-top: -270px; /* Slightly increased from -250px */
+            position: relative; /* Add this line */
+            z-index: 1; /* Add this line to ensure the footer stays on top */
+        }
+
+        /* ... rest of the existing styles ... */
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                min-height: calc(100vh - 180px); /* Adjust based on your footer height */
+            }
+        }
+
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: -160px; /* Slightly increased from -150px */
+        }
+
+        .zebra-title {
+            margin-bottom: 30px;
+        }
+
+        .buy-box {
+            margin: 20px auto;
+        }
+
+        .ca-box {
+            margin: 20px auto;
+        }
+
+        @keyframes blinkingShadow {
+            0% {
+                box-shadow: 0 6px 12px rgba(0,0,0,0.3),
+                            inset 0 -8px 0 0 rgba(0,0,0,0.2),
+                            0 0 20px rgba(0, 255, 0, 0.7);
+            }
+            50% {
+                box-shadow: 0 6px 12px rgba(0,0,0,0.3),
+                            inset 0 -8px 0 0 rgba(0,0,0,0.2),
+                            0 0 40px rgba(0, 255, 0, 0.9);
+            }
+            100% {
+                box-shadow: 0 6px 12px rgba(0,0,0,0.3),
+                            inset 0 -8px 0 0 rgba(0,0,0,0.2),
+                            0 0 20px rgba(0, 255, 0, 0.7);
+            }
+        }
+
+        .ca-box.copied {
+            background-color: #4CAF50;
+            transition: background-color 0.3s ease;
+        }
+
+        .ca-box.copied .clipboard-icon {
+            display: none;
+        }
+
+        .buy-box .dollar-sign {
+            color: #00cc00; /* Darker green color for the dollar sign */
+            text-shadow: 1px 1px 0 #000000; /* Maintain readability with a black shadow */
+            -webkit-text-stroke: 1px black; /* For webkit browsers */
+            text-stroke: 1px black; /* Standard property (not widely supported yet) */
+            paint-order: stroke fill; /* Ensures the stroke is outside the fill */
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <nav class="menu-bar">
+            <a href="#" class="logo-link" id="logoLink">
+                <img src="https://i.ibb.co/RS1fq4j/remove.jpg" alt="PaulTysonCoin Logo" class="logo">
+            </a>
+            <div class="social-icons">
+                <a href="https://x.com/PaulTyson_Coin" target="_blank" class="social-icon">
+                    <img src="https://i.ibb.co/hZ5cJGs/social-media-14417460-1.jpg" alt="X (Twitter) Icon" class="social-logo">
+                </a>
+                <a href="https://t.me/+pBA3TnLKUAUzY2Y0" target="_blank" class="social-icon">
+                    <img src="https://i.ibb.co/xLkpwTv/paper-plane-15793418.jpg" alt="Telegram Icon" class="social-logo">
+                </a>
+                <a href="https://pump.fun" target="_blank" class="social-icon">
+                    <img src="https://i.ibb.co/1bMB9JZ/0-Rwq-Gm887t-St-Aj-YXs-removebg-preview.png" alt="Pump.fun Icon" class="social-logo">
+                </a>
+                <a href="https://pump.fun" target="_blank" class="social-icon">
+                    <img src="https://i.ibb.co/2MQKQ5z/661375b92a7e161501f4b5e5-dexscreener-322a5a2d.jpg" alt="DexScreener Icon" class="social-logo">
+                </a>
+            </div>
+        </nav>
+        <div id="falling-coins-container"></div>
+        <div class="container" style="position: relative;">
+            <div class="centered-content">
+                <h1 class="zebra-title">PaulTysonCoin</h1>
+                <!-- Updated image -->
+                <img src="https://i.ibb.co/RS1fq4j/remove.jpg" alt="PaulTysonCoin Logo" class="zilla-image">
+                <a href="#" class="buy-box" onclick="alert('Buy $PaulTysonCoin clicked!');">
+                    Buy <span class="dollar-sign">$</span>PaulTysonCoin
+                </a>
+                <div class="ca-box" id="caBox">
+                    <span class="ca-text">Token Address</span>
+                    <img src="https://i.ibb.co/1qc2Bfm/copy-3962627.png" alt="Copy" class="clipboard-icon">
+                </div>
+            </div>
+            <img src="https://i.ibb.co/1qNYnm1/Zilla-Bez-noh.jpg" alt="Zilla without legs" class="falling-image">
+        </div>
+        <div class="footer-spacer"></div>
+    </div>
+
+    <!-- Add this new footer section just before the closing </body> tag -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About PaulTysonCoin</h3>
+                <p>PaulTyson Coin is a meme cryptocurrency celebrating the epic boxing match between Jake Paul and Mike Tyson. Designed for fans and investors, it blends the excitement of celebrity boxing with the fun of meme culture. Join the community and invest in the hype surrounding this historic fight!
+                </p>
+            </div>
+            <div class="footer-section">
+                <h3>Disclaimer</h3>
+                <ul>
+                    <a>This website is an independent, community-driven platform and does NOT officially represent PaulTysonCoin. The content provided is solely for entertainment and informational purposes. 
+
+                    </a>
+                    <a>Not Financial Advice: This website does not provide financial or investment advice. Always consult a professional before making financial decisions involving PaulTysonCoin or any other cryptocurrency.</a>
+                   
+                
+                 
+                    <!-- Removed: <li><a href="#">Whitepaper</a></li> -->
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="https://x.com/PaulTyson_Coin" target="_blank"><img src="https://i.ibb.co/hZ5cJGs/social-media-14417460-1.jpg" alt="X (Twitter)"></a>
+                    <a href="https://t.me/+pBA3TnLKUAUzY2Y0" target="_blank"><img src="https://i.ibb.co/xLkpwTv/paper-plane-15793418.jpg" alt="Telegram"></a>
+                    <a href="https://pump.fun" target="_blank"><img src="https://i.ibb.co/1bMB9JZ/0-Rwq-Gm887t-St-Aj-YXs-removebg-preview.png" alt="Pump.fun"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 PaulTysonCoin. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const fallingCoinsContainer = document.getElementById('falling-coins-container');
+        const buyBox = document.querySelector('.buy-box');
+        let isHovering = false;
+
+        function createFallingCoin() {
+            const coin = document.createElement('img');
+            coin.src = 'https://i.ibb.co/RS1fq4j/remove.jpg';
+            coin.classList.add('falling-coin');
+            coin.style.left = `${Math.random() * 100}vw`;
+            coin.style.animationDuration = `${Math.random() * 6 + 6}s`; // 6-12 seconds duration
+            coin.style.top = `${Math.random() * -100}px`; // Start above the viewport
+            fallingCoinsContainer.appendChild(coin);
+
+            // Remove the coin after it has fallen out of view
+            setTimeout(() => {
+                coin.remove();
+                // Create a new coin only if still hovering
+                if (isHovering) {
+                    createFallingCoin();
+                }
+            }, parseFloat(coin.style.animationDuration) * 1000);
+        }
+
+        function startFallingCoins() {
+            isHovering = true;
+            // Create initial coins
+            for (let i = 0; i < 15; i++) {
+                createFallingCoin();
+            }
+        }
+
+        function stopFallingCoins() {
+            isHovering = false;
+            // Clear all existing coins
+            fallingCoinsContainer.innerHTML = '';
+        }
+
+        buyBox.addEventListener('mouseenter', startFallingCoins);
+        buyBox.addEventListener('mouseleave', stopFallingCoins);
+
+        const caBox = document.getElementById('caBox');
+        const originalText = caBox.querySelector('.ca-text').textContent;
+        const clipboardIcon = caBox.querySelector('.clipboard-icon');
+        
+        caBox.addEventListener('mouseenter', () => {
+            caBox.style.cursor = 'pointer';
+        });
+
+        caBox.addEventListener('click', () => {
+            const caText = caBox.querySelector('.ca-text').textContent;
+            navigator.clipboard.writeText(caText).then(() => {
+                caBox.querySelector('.ca-text').textContent = 'Address Copied!';
+                caBox.classList.add('copied');
+                clipboardIcon.style.display = 'none';
+                
+                setTimeout(() => {
+                    caBox.querySelector('.ca-text').textContent = originalText;
+                    caBox.classList.remove('copied');
+                    clipboardIcon.style.display = 'inline';
+                }, 2000); // Reset after 2 seconds
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        });
+
+        // Add this new code at the end of the script section
+        document.getElementById('logoLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            // You can add any additional actions here if needed
+            console.log('Logo clicked, but page not redirected');
+        });
+    </script>
+</body>
+</html>
